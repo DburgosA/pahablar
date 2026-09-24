@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Comunicador AAC">
+  <rect width="64" height="64" rx="18" fill="#287f74"/>
+  <path d="M16 19h32a7 7 0 0 1 7 7v13a7 7 0 0 1-7 7H34l-9 8v-8h-9a7 7 0 0 1-7-7V26a7 7 0 0 1 7-7Z" fill="#fff" opacity=".97"/>
+  <path d="M23 31v4m6-7v10m6-13v16" stroke="#287f74" stroke-width="4" stroke-linecap="round"/>
+</svg>
