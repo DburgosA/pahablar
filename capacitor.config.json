@@ -1,0 +1,9 @@
+{
+  "appId": "com.familia.comunicador",
+  "appName": "Comunicador AAC",
+  "webDir": "dist/public",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false
+  }
+}
