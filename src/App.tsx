@@ -209,6 +209,7 @@ function Home() {
   const [organizing, setOrganizing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [feedback, setFeedback] = useState<{ message: string; error?: boolean } | null>(null);
+  const [quickPhrase, setQuickPhrase] = useState('');
   const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const notify = (message: string, error = false) => {
@@ -238,6 +239,17 @@ function Home() {
     setSelected(phrase);
     try {
       await speakSpanish(phrase.text);
+      notify('Frase reproducida');
+    } catch {
+      notify('No se pudo reproducir la voz.', true);
+    }
+  };
+
+  const playQuickPhrase = async () => {
+    const clean = quickPhrase.trim();
+    if (!clean) return;
+    try {
+      await speakSpanish(clean);
       notify('Frase reproducida');
     } catch {
       notify('No se pudo reproducir la voz.', true);
@@ -283,6 +295,37 @@ function Home() {
   return (
     <div className="app-shell">
       <main className="mx-auto max-w-6xl px-4 pb-32 pt-8 sm:px-8 sm:pt-10">
+        <section className="mx-auto mb-8 max-w-4xl rounded-[1.6rem] border-2 border-border bg-card px-5 py-5 shadow-sm sm:px-8 sm:py-7" aria-labelledby="quick-phrase-title">
+          <h1 id="quick-phrase-title" className="text-2xl font-bold sm:text-3xl">Escribir una frase</h1>
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <input
+              id="quick-phrase"
+              value={quickPhrase}
+              onChange={(event) => setQuickPhrase(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && !event.nativeEvent.isComposing) {
+                  event.preventDefault();
+                  void playQuickPhrase();
+                }
+              }}
+              maxLength={120}
+              placeholder="Escribe lo que quieres decir"
+              className="min-h-16 min-w-0 flex-1 rounded-2xl border-2 border-input bg-background px-4 text-xl text-foreground shadow-sm placeholder:text-muted-foreground/70"
+              aria-label="Frase para reproducir sin guardar"
+              data-testid="input-quick-phrase"
+            />
+            <button
+              type="button"
+              onClick={() => void playQuickPhrase()}
+              disabled={!quickPhrase.trim()}
+              className="inline-flex min-h-16 items-center justify-center gap-3 rounded-2xl bg-primary px-6 text-lg font-bold text-primary-foreground shadow-md hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-45"
+              data-testid="button-play-quick-phrase"
+            >
+              <Volume2 size={23} /> Reproducir
+            </button>
+          </div>
+        </section>
+
         {selected && (
           <section className="mx-auto mb-8 max-w-4xl rounded-[1.6rem] border-2 border-primary/20 bg-card px-5 py-5 shadow-[0_10px_30px_hsl(173_45%_31%_/_0.1)] sm:px-8 sm:py-7" aria-live="polite" data-testid="selected-phrase-display">
             <p className="text-sm font-bold uppercase tracking-[.13em] text-primary">Última frase</p>
@@ -334,7 +377,7 @@ function Home() {
         <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setShowSettings(false); }}>
           <section className="modal-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
             <div className="flex items-start justify-between gap-4">
-              <div><p className="text-sm font-bold uppercase tracking-[.12em] text-primary">Ajustes</p><h2 id="settings-title" className="mt-1 text-2xl font-bold">Tu espacio de comunicación</h2></div>
+              <h2 id="settings-title" className="text-2xl font-bold">Ajustes</h2>
               <button type="button" onClick={() => setShowSettings(false)} className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-muted-foreground hover:bg-secondary" aria-label="Cerrar ajustes" data-testid="button-close-settings"><X size={24} /></button>
             </div>
             <div className="mt-7 space-y-4">
