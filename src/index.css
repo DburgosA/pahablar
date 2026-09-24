@@ -1,0 +1,158 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--app-font-sans);
+}
+
+:root {
+  --background: 177 35% 96%;
+  --foreground: 211 39% 19%;
+  --border: 174 20% 82%;
+  --input: 174 20% 74%;
+  --ring: 173 45% 36%;
+  --card: 0 0% 100%;
+  --card-foreground: 211 39% 19%;
+  --card-border: 174 24% 86%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 211 39% 19%;
+  --popover-border: 174 24% 82%;
+  --primary: 173 45% 31%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 178 39% 89%;
+  --secondary-foreground: 173 45% 24%;
+  --muted: 177 24% 91%;
+  --muted-foreground: 211 19% 43%;
+  --accent: 35 82% 61%;
+  --accent-foreground: 211 39% 19%;
+  --destructive: 6 66% 47%;
+  --destructive-foreground: 0 0% 100%;
+  --radius: 1.15rem;
+  --app-font-sans: "Avenir Next", "Trebuchet MS", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; background: hsl(var(--background)); }
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100dvh;
+  font-family: var(--app-font-sans);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+}
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 4px solid hsl(var(--accent));
+  outline-offset: 3px;
+}
+
+.app-shell {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 12% 0%, hsl(177 45% 92% / .8), transparent 28rem),
+    linear-gradient(180deg, hsl(177 35% 96%), hsl(177 28% 93%));
+}
+.phrase-button {
+  position: relative;
+  display: flex;
+  min-height: 96px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid hsl(var(--card-border));
+  border-radius: 1.35rem;
+  padding: 1.15rem 1.25rem;
+  text-align: left;
+  color: hsl(var(--foreground));
+  background: hsl(var(--card));
+  box-shadow: 0 5px 0 hsl(174 24% 82% / .8), 0 12px 24px hsl(173 30% 29% / .06);
+  transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+  touch-action: manipulation;
+  user-select: none;
+}
+.phrase-button:hover { transform: translateY(-2px); border-color: hsl(var(--phrase-color)); }
+.phrase-button:active { transform: translateY(2px); box-shadow: 0 2px 0 hsl(174 24% 82% / .8); }
+.phrase-button.is-selected { border-color: hsl(var(--phrase-color)); box-shadow: 0 0 0 4px hsl(var(--phrase-color) / .18), 0 6px 0 hsl(var(--phrase-color) / .35); }
+.phrase-button::before {
+  content: "";
+  width: .55rem;
+  align-self: stretch;
+  flex: none;
+  margin: -.25rem 1rem -.25rem -.65rem;
+  border-radius: 999px;
+  background: hsl(var(--phrase-color));
+}
+.drag-handle { color: hsl(var(--muted-foreground)); }
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: end center;
+  padding: 1rem;
+  background: hsl(211 39% 19% / .44);
+  animation: fade-in 160ms ease both;
+}
+.modal-panel {
+  width: min(100%, 35rem);
+  max-height: min(90dvh, 48rem);
+  overflow: auto;
+  border: 1px solid hsl(var(--card-border));
+  border-radius: 1.65rem;
+  padding: 1.35rem;
+  background: hsl(var(--card));
+  box-shadow: 0 24px 70px hsl(211 39% 19% / .22);
+  animation: rise-in 180ms ease both;
+}
+.color-swatch {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  transition: transform 140ms ease;
+}
+.color-swatch[aria-checked="true"] { border-color: hsl(var(--foreground)); box-shadow: 0 0 0 3px hsl(var(--card)); outline: 2px solid hsl(var(--foreground)); transform: scale(1.08); }
+.status-toast { animation: rise-in 180ms ease both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@media (min-width: 640px) {
+  .modal-backdrop { place-items: center; }
+  .modal-panel { padding: 1.75rem; }
+}
+@media (min-width: 760px) {
+  .phrase-button { min-height: 112px; padding: 1.35rem 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
